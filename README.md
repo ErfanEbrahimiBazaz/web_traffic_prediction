@@ -16,6 +16,18 @@ Or this chart which is aggregated on monthly data.
 ![ADFT for months](img/df_m_adcf.PNG)
 
 + LSTM_For_TSA: Data is prepared for feeding an LSTM model. The model is built by using Keras. Different architectures are checked by using different number of neurons and different number of layers with different dropout rates to see which model results the lowest MSE and therefore is the most accurate one.
+
+To be able to apply LSTM on timeseries data, we need to create the following data structure and feed it to the LSTM network.
+
+| Feature 1 | Feature 2 | Feature 3 | Target Value|
+| :- | :- | :- | :- |
+| ts(t-3) | ts(t-2) | ts(t-1) | ts(t) |
+| ts(t-2) | ts(t-1) | ts(t)   | ts(t+1)
+| ts(t-1) |  ts(t)  | ts(t+1) | ts(t+2)
+| ts(t) | ts(t+1) | ts(t+2)    |      ts(t+3)
+
+In this notebook different LSTM networks are created and trained with above data structure. Different architectures of LSTM is checked (Different number of layers with different number of neurons at each level with or without dropout, with different activation functions). At the end the best architecture is introduced.
+
 + 4-multivariate_tsa notebook: This is quite a big notebook. It contains preparing a dataframe from the timeseries to feed an XGBoost, a lightgbm, and a catboost model. In fact we have changed the timeseries problem from a univariate to a multivariate problem and like my other repositories for making ensemble models, I use that dataframe to train a model. Later an ensemble of models is trained with this data structure. I trained 5 xgboost, 5 lightgbm and 5 catboost models. Lightgbm requires large number of data to be trained well. As we only have 550 records (after creating the dataframe from timeseries), lightgbm performs poorly. 
 
 
