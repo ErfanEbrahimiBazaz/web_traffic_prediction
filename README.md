@@ -28,7 +28,15 @@ To be able to apply LSTM on timeseries data, we need to create the following dat
 
 In this notebook different LSTM networks are created and trained with above data structure. Different architectures of LSTM is checked (Different number of layers with different number of neurons at each level with or without dropout, with different activation functions). At the end the best architecture is introduced.
 
-+ 4-multivariate_tsa notebook: This is quite a big notebook. It contains preparing a dataframe from the timeseries to feed an XGBoost, a lightgbm, and a catboost model. In fact we have changed the timeseries problem from a univariate to a multivariate problem and like my other repositories for making ensemble models, I use that dataframe to train a model. Later an ensemble of models is trained with this data structure. I trained 5 xgboost, 5 lightgbm and 5 catboost models. Lightgbm requires large number of data to be trained well. As we only have 550 records (after creating the dataframe from timeseries), lightgbm performs poorly. 
++ 4-multivariate_tsa notebook: This is quite a big notebook. It contains preparing a dataframe from the timeseries to feed an XGBoost, a lightgbm, and a catboost model. In fact we have changed the timeseries problem from a univariate to a multivariate problem and like my other repositories for making ensemble models, I use that dataframe to train a model. 
+
+As by nature our dataset is univariate, I need to first build the following dataset and extract features like mean, std, difference between the current value with 1, 2 and 3 previous days.
+
+| Feature 1 | Feature 2 | Feature 3 | Feature 4 | Feature 5 | Feature 6 | Feature 7 | Feature 8 | target |
+| :- | :- | :- | :- | :- | :- | :- | :- | :- |              
+| var(t=-3) |  var(t=-2) |   var(t=-1) |  mean |  std |   var(t)-var(t=-3)  |  var(t)-var(t=-2) |   var(t)-var(t=-1) |  
+
+Later an ensemble of models is trained with this data structure. I trained 5 xgboost, 5 lightgbm and 5 catboost models. Lightgbm requires large number of data to be trained well. As we only have 550 records (after creating the dataframe from timeseries), lightgbm performs poorly. 
 
 
 I used pickle to dump each trained model. I weighted each catboost and xgboost trained model twice as a lightgbm one. Later on I made a hard voter to calculate the mean of the prediction of each model. To calculate the score of the ensemble voter I used MSE.
